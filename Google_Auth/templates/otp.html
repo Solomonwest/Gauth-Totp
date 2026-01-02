@@ -6,7 +6,21 @@
     <title>Document</title>
 </head>
 <body>
-    {% csrf_token %}
-    {{ form.as_p }}
+    
+    <h2> Scan Qrcode with google authenticator </h2>
+   <div> {{ qr_code|safe }} </div>
+
+    <form action="" method="post">
+        {% csrf_token %}
+        <input type="text" name="token" placeholder="Enter the 6 digit code from Authenticator app">
+        <button type="submit">Submit</button>
+    </form>
+
+    {% if error %}
+    <ul>
+    <li>{{ error }}</li>
+    </ul>
+    {% endif %}
+
 </body>
 </html>

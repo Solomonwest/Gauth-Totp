@@ -1,29 +1,69 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import login
+from django.contrib import auth
+from io import BytesIO
+import qrcode
+import qrcode.image.svg
 
-from django_otp.decorators import otp_required
+from django.contrib import messages
+
 from django_otp import login as otp_login
 from django_otp.forms import OTPTokenForm
+from django_otp.plugins.otp_totp.models import TOTPDevice
 
 
 # Create your views here.
 @login_required
-@otp_required
 def index(request):
+    user = request.user
+    # if request.POST['logout']:
+    #     auth.logout(user)
+    #     return redirect('login')
     return render (request, 'index.html')
 
 
 def otp_verify(request):
 
-    user = request.user
-    if request.method == 'POST':
-        form = OTPTokenForm(user, request.POST)
-        if form.is_valid():
-            otp_login(request, form.otp_device)
-            return redirect ('home')
-        
-    else:
-        form = OTPTokenForm(user)
+    device, created = TOTPDevice.objects.get_or_create(user=request.user, confirmed=False)
 
-    return render(request, 'otp.html', {'form':form})
+    otp_url = device.config_url
+    # otp_key = device.key
+
+    factory = qrcode.image.svg.SvgPathImage
+    img = qrcode.make(otp_url, image_factory=factory, box_size=20)
+
+    stream = BytesIO()
+    img.save(stream)
+    svg_data = stream.getvalue().decode()
+
+    return render(request, 'otp.html', {'qr_code':svg_data})
+
+
+def verify_and_enable(request):
+    token = request.POST.get('token','').strip()
+
+    device = TOTPDevice.objects.filter(user=request.user, confirmed=False).first()
+
+    if device and device.verify_token(token):
+        device.confirmed = True
+        device.save()
+        return redirect('index')
+    else:
+        return render(request, 'otp.html', {'error': "INVALID CODE"})
+
+
+def login_view(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+
+        user = auth.authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            print(request.user)
+            return redirect('index')
+        else:
+            return messages.error(request, "User doesn't exist")
+    return render(request, 'login.html')
 
