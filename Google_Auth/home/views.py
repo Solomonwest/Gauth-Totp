@@ -16,15 +16,10 @@ from django_otp.plugins.otp_totp.models import TOTPDevice
 # Create your views here.
 @login_required
 def index(request):
-    user = request.user
-    # if request.POST['logout']:
-    #     auth.logout(user)
-    #     return redirect('login')
     return render (request, 'index.html')
 
 
 def otp_verify(request):
-
     device, created = TOTPDevice.objects.get_or_create(user=request.user, confirmed=False)
 
     otp_url = device.config_url
@@ -36,6 +31,18 @@ def otp_verify(request):
     stream = BytesIO()
     img.save(stream)
     svg_data = stream.getvalue().decode()
+
+
+    token = request.POST.get('token','').strip()
+
+    devices = TOTPDevice.objects.filter(user=request.user, confirmed=False).first()
+
+    if devices and devices.verify_token(token):
+        devices.confirmed = True
+        devices.save()
+        return redirect('index')
+    # else:
+    #     return render(request, 'otp.html', {'error': "INVALID CODE"})
 
     return render(request, 'otp.html', {'qr_code':svg_data})
 
@@ -67,3 +74,7 @@ def login_view(request):
             return messages.error(request, "User doesn't exist")
     return render(request, 'login.html')
 
+def logout(request):
+    user = request.user
+    auth.logout(request, user)
+    return redirect('login')
