@@ -71,7 +71,9 @@ def login_view(request):
             print(request.user)
             return redirect('index')
         else:
+            print('It worksssss!!!!')
             return messages.error(request, "User doesn't exist")
+
     return render(request, 'login.html')
 
 def logout(request):
