@@ -3,21 +3,184 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
+    <title>Backend Developer Portfolio</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: "Arial", sans-serif;
+            background-color: #004d4d; /* matches screenshot background */
+            color: #ffffff;
+        }
+
+        /* Navbar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 40px;
+            background: rgba(0, 0, 0, 0.4);
+            position: sticky;
+            top: 0;
+        }
+
+        .navbar img.logo {
+            height: 40px;
+        }
+
+        .logout-btn {
+            background: #ff5c5c;
+            border: none;
+            padding: 10px 20px;
+            color: #fff;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: #ff3333;
+        }
+
+        /* Hero Section */
+        .hero {
+            display: flex;
+            padding: 80px 40px;
+            gap: 50px;
+            align-items: center;
+        }
+
+        .hero img {
+            width: 250px;
+            height: 250px;
+            border-radius: 12px;
+            object-fit: cover;
+            border: 3px solid #ffffff;
+        }
+
+        .hero-text h1 {
+            font-size: 48px;
+            margin: 0;
+        }
+
+        .hero-text p {
+            font-size: 18px;
+            max-width: 450px;
+            line-height: 1.6;
+        }
+
+        /* Sections */
+        .section {
+            padding: 60px 40px;
+        }
+
+        .section h2 {
+            font-size: 34px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ffffff;
+            display: inline-block;
+        }
+
+        .skills-list,
+        .project-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .skill,
+        .project {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 20px;
+            border-radius: 10px;
+            width: calc(33% - 20px);
+            min-width: 220px;
+            transition: 0.3s;
+        }
+
+        .skill:hover,
+        .project:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .footer {
+            text-align: center;
+            padding: 30px;
+            margin-top: 40px;
+            color: #cccccc;
+        }
+
+        @media (max-width: 768px) {
+            .hero {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .skills-list, .project-list {
+                flex-direction: column;
+            }
+        }
+    </style>
 </head>
 <body>
-    <h1>Welcome to the homepage !! </h1>
-    <p> Lorem ipsum dolor sit amet consectetur adipisicing elit. 
-        Voluptatum totam voluptatem nisi fugiat hic! Dolore, eum deserunt! 
-        Perspiciatis inventore sed animi unde harum, est officia cumque, maxime assumenda, 
-        placeat voluptas?
-    </p>
 
-    <form action="" method="post">
-        {% csrf_token %}
-        <input type="submit" value="logout" name="logout">
-    </form>
+    <!-- NAVBAR -->
+    <div class="navbar">
+        <img src="https://dummyimage.com/150x40/ffffff/000000&text=Your+Logo" class="logo" alt="Logo">
+        <button name="logout" class="logout-btn">Logout</button>
+    </div>
 
+    <!-- HERO -->
+    <div class="hero">
+        <img src="https://dummyimage.com/300x300/000/fff&text=Profile+Photo" alt="Profile Photo">
+
+        <div class="hero-text">
+            <h1>Solomon West</h1>
+            <p>
+                Backend Developer specializing in building scalable APIs, secure authentication systems, and 
+                high-performance server-side logic. Passionate about Django, FastAPI, and cloud technologies.
+            </p>
+        </div>
+    </div>
+
+    <!-- SKILLS -->
+    <div class="section">
+        <h2>Skills</h2>
+        <div class="skills-list">
+            <div class="skill">Django / Django REST Framework</div>
+            <div class="skill">FastAPI</div>
+            <div class="skill">PostgreSQL / MongoDB</div>
+            <div class="skill">Authentication & Security</div>
+            <div class="skill">Docker</div>
+            <div class="skill">CI/CD & Deployment</div>
+        </div>
+    </div>
+
+    <!-- PROJECTS -->
+    <div class="section">
+        <h2>Projects</h2>
+        <div class="project-list">
+            <div class="project">
+                <h3>FixMyStreet Clone</h3>
+                <p>Geo-location complaint reporting system built with FastAPI & MongoDB.</p>
+            </div>
+
+            <div class="project">
+                <h3>Marketplace API</h3>
+                <p>Complete marketplace API with authentication and payment integration.</p>
+            </div>
+
+            <div class="project">
+                <h3>Football Match App</h3>
+                <p>Next.js + Django app with predictions, comments & live updates.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+        © 2026 Solomon West — Backend Developer
+    </div>
 
 </body>
 </html>

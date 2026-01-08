@@ -19,7 +19,13 @@ def index(request):
     return render (request, 'index.html')
 
 
-def otp_verify(request):
+def totp_setup(request):
+
+    confirmed_device = TOTPDevice.objects.filter(user=request.user, confirmed=True).first()
+    if confirmed_device:
+        return render
+
+
     device, created = TOTPDevice.objects.get_or_create(user=request.user, confirmed=False)
 
     otp_url = device.config_url
@@ -78,5 +84,5 @@ def login_view(request):
 
 def logout(request):
     user = request.user
-    auth.logout(request, user)
+    auth.logout(user)
     return redirect('login')
