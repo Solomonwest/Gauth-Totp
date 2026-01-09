@@ -5,6 +5,7 @@ from django.contrib import auth
 from io import BytesIO
 import qrcode
 import qrcode.image.svg
+import base64
 
 from django.contrib import messages
 
@@ -23,20 +24,27 @@ def totp_setup(request):
 
     confirmed_device = TOTPDevice.objects.filter(user=request.user, confirmed=True).first()
     if confirmed_device:
-        return render
+        return render(request, 'totp_verify.html',
+                      {'has_confirmed_device': True})
+    
+    TOTPDevice.objects.filter(user=request.user, confirmed=False).delete()
 
 
     device, created = TOTPDevice.objects.get_or_create(user=request.user, confirmed=False)
 
     otp_url = device.config_url
-    # otp_key = device.key
 
     factory = qrcode.image.svg.SvgPathImage
     img = qrcode.make(otp_url, image_factory=factory, box_size=20)
-
     stream = BytesIO()
     img.save(stream)
+
+    # QR CODE for TOTP DEVICE 
     svg_data = stream.getvalue().decode()
+
+    raw_key = device.bin_key
+    # SECRET KEY FOR TOTP DEVICE
+    base32_key = base64.b32encode(raw_key).decode('utf-8').strip('=')
 
 
     token = request.POST.get('token','').strip()
@@ -50,7 +58,7 @@ def totp_setup(request):
     # else:
     #     return render(request, 'otp.html', {'error': "INVALID CODE"})
 
-    return render(request, 'otp.html', {'qr_code':svg_data})
+    return render(request, 'otp.html', {'qr_code':svg_data, 'setup_key': base32_key})
 
 
 def verify_and_enable(request):
