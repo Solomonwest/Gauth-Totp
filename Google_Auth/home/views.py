@@ -2,16 +2,15 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
 from django.contrib import auth
+from django.contrib import messages
+
+from django_otp.plugins.otp_totp.models import TOTPDevice
 from io import BytesIO
 import qrcode
 import qrcode.image.svg
 import base64
 
-from django.contrib import messages
 
-from django_otp import login as otp_login
-from django_otp.forms import OTPTokenForm
-from django_otp.plugins.otp_totp.models import TOTPDevice
 
 
 # Create your views here.
@@ -27,6 +26,7 @@ def totp_setup(request):
         return render(request, 'totp_verify.html',
                       {'has_confirmed_device': True})
     
+    # Delete all un-confirmed TOTP Devices for the user 
     TOTPDevice.objects.filter(user=request.user, confirmed=False).delete()
 
 
