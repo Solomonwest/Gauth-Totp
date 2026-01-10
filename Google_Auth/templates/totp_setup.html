@@ -1,26 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Google Authenticator Setup</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    
-    <h2> Scan Qrcode with google authenticator </h2>
-   <div> {{ qr_code|safe }} </div>
 
-    <form action="" method="post">
-        {% csrf_token %}
-        <input type="text" name="token" placeholder="Enter the 6 digit code from Authenticator app">
-        <button type="submit">Submit</button>
-    </form>
+<body class="bg-gray-900 text-white flex items-center justify-center min-h-screen">
+    <div class="bg-gray-800 p-8 rounded-xl shadow-lg w-full max-w-md text-center">
 
-    <!-- {% if error %}
-    <ul>
-    <li>{{ error }}</li>
-    </ul>
-    {% endif %} -->
+        <h1 class="text-2xl font-semibold mb-6">Set Up Google Authenticator</h1>
 
+        <!-- QR Code Section -->
+        <div class="mb-4">
+            <img src="{{ qr_code_url }}" alt="QR Code" class="mx-auto border border-gray-600 p-3 rounded-lg bg-white" />
+        </div>
+
+        <!-- Secret Key -->
+        <div class="mb-6">
+            <p class="text-gray-300 text-sm mb-1">Secret Key:</p>
+            <p class="text-lg font-mono bg-gray-700 py-2 px-3 rounded select-all">
+                {{ secret_key }}
+            </p>
+            <p class="text-xs text-gray-400 mt-1">You can manually enter this in Google Authenticator if scanning fails.</p>
+        </div>
+
+        <!-- Token Input -->
+        <form method="POST" action="">
+            {% csrf_token %}
+            <div class="mb-5">
+                <input 
+                    type="text" 
+                    name="token" 
+                    maxlength="6"
+                    placeholder="Enter 6-digit code"
+                    class="w-full px-4 py-3 rounded bg-gray-700 border border-gray-600 focus:border-blue-500 focus:outline-none text-center text-lg tracking-widest"
+                    required
+                >
+            </div>
+
+            <button
+                type="submit"
+                class="w-full bg-blue-600 hover:bg-blue-700 py-3 rounded-lg font-semibold text-white transition"
+            >
+                Verify Token
+            </button>
+        </form>
+
+    </div>
 </body>
 </html>

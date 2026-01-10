@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2FA Setup Successful</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-900 text-white flex items-center justify-center min-h-screen">
+
+    <div class="bg-gray-800 p-10 rounded-xl shadow-lg max-w-md w-full text-center">
+
+        <!-- Success Icon -->
+        <div class="flex justify-center mb-6">
+            <svg class="w-20 h-20 text-green-500" fill="none" stroke="currentColor" stroke-width="1.5"
+                viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M9 12.75l2.25 2.25L15 9.75m-3 12a9 9 0 100-18 9 9 0 000 18z"></path>
+            </svg>
+        </div>
+
+        <h1 class="text-3xl font-bold mb-3">Two-Factor Authentication Enabled</h1>
+        <p class="text-gray-300 text-sm mb-8">
+            Your Google Authenticator setup is complete.  
+            From now on, you'll need a verification code when signing in.
+        </p>
+
+        <!-- Next Step Button -->
+        <a href="{% url 'dashboard' %}"
+           class="block w-full bg-green-600 hover:bg-green-700 py-3 rounded-lg text-white font-semibold transition">
+            Continue to Dashboard
+        </a>
+
+        <!-- Optional: disable or edit -->
+        <p class="text-xs text-gray-500 mt-5">
+            If you ever lose access to your authenticator, contact support.
+        </p>
+
+    </div>
+
+</body>
+</html>
