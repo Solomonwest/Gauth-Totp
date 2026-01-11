@@ -71,7 +71,7 @@ def verify_and_enable(request):
         device.save()
         return redirect('index')
     else:
-        return render(request, 'otp.html', {'error': "INVALID CODE"})
+        return render(request, 'totp_verify.html', {'error': "INVALID CODE"})
 
 
 def login_view(request):
