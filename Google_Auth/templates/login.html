@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -26,5 +26,75 @@
         <input type="password" placeholder ="e.g pasword@231" id="password" name="password">
         <input type="submit" value="submit">
     </form>
+</body>
+</html> -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="min-h-screen flex items-center justify-center bg-[#204745] text-white">
+
+    <div class="w-full max-w-md bg-gray-900/70 backdrop-blur-md p-10 rounded-2xl shadow-xl">
+
+        <h1 class="text-3xl font-bold mb-6 text-center">Welcome Back</h1>
+
+        {% if form.errors %}
+        <div class="bg-red-600 text-white p-3 rounded mb-4 text-sm">
+            Invalid login details. Please try again.
+        </div>
+        {% endif %}
+
+        <form method="POST" class="space-y-5">
+            {% csrf_token %}
+
+            <!-- Email -->
+            <div class="relative">
+                <input name="email" type="email" value="{{ form.email.value }}" required
+                    class="peer w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 placeholder-transparent 
+                           focus:outline-none focus:border-blue-500 text-white"
+                    placeholder="Email">
+                <label class="absolute left-4 -top-2.5 px-1 text-sm bg-gray-900 peer-placeholder-shown:text-base 
+                               peer-placeholder-shown:top-3 peer-placeholder-shown:text-gray-400 
+                               transition-all text-blue-400">
+                    Email Address
+                </label>
+                {{ form.email.errors }}
+            </div>
+
+            <!-- Password -->
+            <div class="relative">
+                <input name="password" type="password" required
+                    class="peer w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 placeholder-transparent
+                           focus:outline-none focus:border-blue-500 text-white"
+                    placeholder="Password">
+                <label class="absolute left-4 -top-2.5 px-1 text-sm bg-gray-900 peer-placeholder-shown:text-base 
+                               peer-placeholder-shown:top-3 peer-placeholder-shown:text-gray-400 
+                               transition-all text-blue-400">
+                    Password
+                </label>
+                {{ form.password.errors }}
+            </div>
+
+            <!-- Submit -->
+            <button type="submit"
+                class="w-full bg-blue-600 hover:bg-blue-700 transition rounded-lg py-3 font-semibold">
+                Login
+            </button>
+        </form>
+
+        <p class="mt-6 text-center text-gray-400 text-sm">
+            Don’t have an account?
+            <a href="{% url 'signup' %}" class="text-blue-400 hover:text-blue-500">Create one</a>
+        </p>
+
+    </div>
+
 </body>
 </html>

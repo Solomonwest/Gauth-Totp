@@ -14,6 +14,12 @@ import base64
 
 
 # Create your views here.
+
+
+def signup(request):
+    if request.method == 'POST':
+        pass
+
 @login_required
 def index(request):
     return render (request, 'index.html')

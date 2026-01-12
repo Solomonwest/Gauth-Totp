@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="min-h-screen flex items-center justify-center bg-[#204745] text-white">
+
+    <div class="w-full max-w-2xl bg-gray-900/80 backdrop-blur-md p-10 rounded-2xl shadow-xl">
+
+        <h1 class="text-3xl font-bold mb-8 text-center">Create an Account</h1>
+
+        {% if form.errors %}
+        <div class="bg-red-600 text-white p-3 rounded mb-6 text-sm">
+            Please correct the errors below.
+        </div>
+        {% endif %}
+
+        <form method="POST" class="space-y-6">
+            {% csrf_token %}
+
+            <!-- Row 1: First Name & Last Name -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+
+                            <!-- Username -->
+                <div class="relative">
+                    <input name="username" type="text" value="{{ form.username.value }}" required
+                        class="peer w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 placeholder-transparent 
+                            focus:outline-none focus:border-blue-500 text-white"
+                        placeholder="Username">
+                    <label class="absolute left-4 -top-2.5 px-1 text-sm bg-gray-900 peer-placeholder-shown:text-base 
+                                peer-placeholder-shown:top-3 peer-placeholder-shown:text-gray-400 
+                                transition-all text-blue-400">
+                        Username
+                    </label>
+                    {{ form.last_name.errors }}
+                </div>
+
+
+                <!-- First Name -->
+                <div class="relative">
+                    <input name="first_name" type="text" value="{{ form.first_name.value }}" required
+                           class="peer w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3
+                                  placeholder-transparent focus:outline-none focus:border-blue-500 text-white"
+                           placeholder="First Name">
+                    <label class="absolute left-4 -top-2.5 px-1 text-sm bg-gray-900 
+                                  peer-placeholder-shown:text-base peer-placeholder-shown:top-3 
+                                  peer-placeholder-shown:text-gray-400 transition-all text-blue-400">
+                        First Name
+                    </label>
+                    {{ form.first_name.errors }}
+                </div>
+
+                <!-- Last Name -->
+                <div class="relative">
+                    <input name="last_name" type="text" value="{{ form.last_name.value }}" required
+                           class="peer w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3
+                                  placeholder-transparent focus:outline-none focus:border-blue-500 text-white"
+                           placeholder="Last Name">
+                    <label class="absolute left-4 -top-2.5 px-1 text-sm bg-gray-900 
+                                  peer-placeholder-shown:text-base peer-placeholder-shown:top-3 
+                                  peer-placeholder-shown:text-gray-400 transition-all text-blue-400">
+                        Last Name
+                    </label>
+                    {{ form.last_name.errors }}
+                </div>
+
+            </div>
+
+            <!-- Email (Full Row) -->
+            <div class="relative">
+                <input name="email" type="email" value="{{ form.email.value }}" required
+                       class="peer w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3
+                              placeholder-transparent focus:outline-none focus:border-blue-500 text-white"
+                       placeholder="Email">
+                <label class="absolute left-4 -top-2.5 px-1 text-sm bg-gray-900 
+                              peer-placeholder-shown:text-base peer-placeholder-shown:top-3 
+                              peer-placeholder-shown:text-gray-400 transition-all text-blue-400">
+                    Email Address
+                </label>
+                {{ form.email.errors }}
+            </div>
+
+            <!-- Row 2: Password + Confirm Password -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+
+                <!-- Password -->
+                <div class="relative">
+                    <input name="password1" type="password" required
+                           class="peer w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3
+                                  placeholder-transparent focus:outline-none focus:border-blue-500 text-white"
+                           placeholder="Password">
+                    <label class="absolute left-4 -top-2.5 px-1 text-sm bg-gray-900 
+                                  peer-placeholder-shown:text-base peer-placeholder-shown:top-3 
+                                  peer-placeholder-shown:text-gray-400 transition-all text-blue-400">
+                        Password
+                    </label>
+                    {{ form.password1.errors }}
+                </div>
+
+                <!-- Confirm Password -->
+                <div class="relative">
+                    <input name="password2" type="password" required
+                           class="peer w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3
+                                  placeholder-transparent focus:outline-none focus:border-blue-500 text-white"
+                           placeholder="Confirm Password">
+                    <label class="absolute left-4 -top-2.5 px-1 text-sm bg-gray-900 
+                                  peer-placeholder-shown:text-base peer-placeholder-shown:top-3 
+                                  peer-placeholder-shown:text-gray-400 transition-all text-blue-400">
+                        Confirm Password
+                    </label>
+                    {{ form.password2.errors }}
+                </div>
+
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit"
+                    class="w-full bg-blue-600 hover:bg-blue-700 transition rounded-lg py-3 font-semibold">
+                Sign Up
+            </button>
+        </form>
+
+        <p class="mt-6 text-center text-gray-300 text-sm">
+            Already have an account?
+            <a href="{% url 'login' %}" class="text-blue-400 hover:text-blue-500">Log In</a>
+        </p>
+
+    </div>
+
+</body>
+</html>
+
+
