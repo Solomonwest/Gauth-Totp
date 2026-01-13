@@ -10,6 +10,8 @@ import qrcode
 import qrcode.image.svg
 import base64
 
+from .forms import SignupForm
+
 
 
 
