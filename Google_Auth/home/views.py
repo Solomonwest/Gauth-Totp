@@ -10,7 +10,7 @@ import qrcode
 import qrcode.image.svg
 import base64
 
-from .forms import SignupForm
+from .forms import SignupForm, LoginForm  
 
 
 
@@ -20,7 +20,16 @@ from .forms import SignupForm
 
 def signup(request):
     if request.method == 'POST':
-        pass
+        if 'login_submit' in request.POST:
+            form = SignupForm(request, data=request.POST)
+            if form.is_valid():
+                user = form.get_user()
+                login(request, user)
+                return redirect('/')
+
+    return render(request, 'sign-up.html',{
+        'form' : form,
+    })
 
 @login_required
 def index(request):
