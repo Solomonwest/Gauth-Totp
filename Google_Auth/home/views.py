@@ -20,20 +20,44 @@ from .forms import SignupForm, LoginForm
 
 def signup(request):
     if request.method == 'POST':
-        if 'login_submit' in request.POST:
-            form = SignupForm(request, data=request.POST)
-            if form.is_valid():
-                user = form.get_user()
-                login(request, user)
-                return redirect('/')
+        form = SignupForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            print('FORM HAS BEEN SUCCESSFULLY CREATED')
+            login(request, user)
+            return redirect('/')
+        
+    else:
+        form = SignupForm(request.POST)
 
-    return render(request, 'sign-up.html',{
-        'form' : form,
+    return render(request, 'sign-up.html', {
+        'form': form,
     })
 
 @login_required
 def index(request):
     return render (request, 'index.html')
+
+
+def login_view(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+
+        user = auth.authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            print(request.user)
+            return redirect('index')
+        else:
+            print('It worksssss!!!!')
+            return messages.error(request, "User doesn't exist")
+
+    return render(request, 'login.html')
+
+def logout(request):
+    auth.logout(request)
+    return redirect('login')
 
 
 def totp_setup(request):
@@ -91,23 +115,4 @@ def verify_and_enable(request):
         return render(request, 'totp_verify.html', {'error': "INVALID CODE"})
 
 
-def login_view(request):
-    if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
 
-        user = auth.authenticate(request, username=username, password=password)
-        if user is not None:
-            login(request, user)
-            print(request.user)
-            return redirect('index')
-        else:
-            print('It worksssss!!!!')
-            return messages.error(request, "User doesn't exist")
-
-    return render(request, 'login.html')
-
-def logout(request):
-    user = request.user
-    auth.logout(user)
-    return redirect('login')

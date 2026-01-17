@@ -8,5 +8,5 @@ urlpatterns = [
     path('2FA_verify/', views.totp_setup, name='totp_verify'),
     path('signup/', views.signup, name='signup'),
     path('login/', views.login_view, name='login'),
-    path('logout', views.logout, name='logout')
+    path('logout/', views.logout, name='logout')
 ] 
