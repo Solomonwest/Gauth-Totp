@@ -14,14 +14,14 @@
 
         <!-- QR Code Section -->
         <div class="mb-4">
-            <img src="{{ qr_code_url }}" alt="QR Code" class="mx-auto border border-gray-600 p-3 rounded-lg bg-white" />
+            <img src="{{ qr_code }}" alt="QR Code" class="mx-auto border border-gray-600 p-3 rounded-lg bg-white" />
         </div>
 
         <!-- Secret Key -->
         <div class="mb-6">
             <p class="text-gray-300 text-sm mb-1">Secret Key:</p>
             <p class="text-lg font-mono bg-gray-700 py-2 px-3 rounded select-all">
-                {{ secret_key }}
+                {{ setup_key }}
             </p>
             <p class="text-xs text-gray-400 mt-1">You can manually enter this in Google Authenticator if scanning fails.</p>
         </div>

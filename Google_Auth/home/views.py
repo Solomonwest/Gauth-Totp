@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
 from django.contrib import auth
 from django.contrib import messages
+from django.db import IntegrityError
 
 from django_otp.plugins.otp_totp.models import TOTPDevice
 from io import BytesIO
@@ -22,13 +23,19 @@ def signup(request):
     if request.method == 'POST':
         form = SignupForm(request.POST)
         if form.is_valid():
-            user = form.save()
-            print('FORM HAS BEEN SUCCESSFULLY CREATED')
-            login(request, user)
-            return redirect('/')
+            try:
+                user = form.save()
+            except IntegrityError:
+                # Handle rare race conditions or DB-level uniqueness failures
+                form.add_error('username', 'A user with that username already exists.')
+            else:
+                print('FORM HAS BEEN SUCCESSFULLY CREATED')
+                login(request, user)
+                return redirect('totp_setup')
         
     else:
-        form = SignupForm(request.POST)
+        # GET: present an empty signup form
+        form = SignupForm()
 
     return render(request, 'sign-up.html', {
         'form': form,
@@ -99,7 +106,7 @@ def totp_setup(request):
     # else:
     #     return render(request, 'otp.html', {'error': "INVALID CODE"})
 
-    return render(request, 'otp.html', {'qr_code':svg_data, 'setup_key': base32_key})
+    return render(request, 'totp_setup.html', {'qr_code':svg_data, 'setup_key': base32_key})
 
 
 def verify_and_enable(request):

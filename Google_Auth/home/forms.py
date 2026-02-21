@@ -39,13 +39,19 @@ class SignupForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ("first_name", "last_name", "email", "password1", "password2")
+        fields = ("username", "first_name", "last_name", "email", "password1", "password2")
 
     def clean_email(self):
         email = self.cleaned_data.get("email")
         if User.objects.filter(email__iexact=email).exists():
             raise forms.ValidationError("An account with this email already exists.")
         return email
+
+    def clean_username(self):
+        username = self.cleaned_data.get("username")
+        if username and User.objects.filter(username__iexact=username).exists():
+            raise forms.ValidationError("This username is already taken.")
+        return username
 
 
 
