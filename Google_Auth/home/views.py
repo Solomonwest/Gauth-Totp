@@ -30,8 +30,8 @@ def signup(request):
                 form.add_error('username', 'A user with that username already exists.')
             else:
                 print('FORM HAS BEEN SUCCESSFULLY CREATED')
-                login(request, user)
-                return redirect('totp_setup')
+                # login(request, user)
+                return redirect('login')
         
     else:
         # GET: present an empty signup form
@@ -55,7 +55,7 @@ def login_view(request):
         if user is not None:
             login(request, user)
             print(request.user)
-            return redirect('index')
+            return redirect('totp_setup')
         else:
             print('It worksssss!!!!')
             return messages.error(request, "User doesn't exist")
@@ -68,7 +68,7 @@ def logout(request):
 
 
 def totp_setup(request):
-
+    print(request.user)
     confirmed_device = TOTPDevice.objects.filter(user=request.user, confirmed=True).first()
     if confirmed_device:
         return render(request, 'totp_verify.html',
