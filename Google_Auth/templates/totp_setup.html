@@ -13,9 +13,23 @@
         <h1 class="text-2xl font-semibold mb-6">Set Up Google Authenticator</h1>
 
         <!-- QR Code Section -->
-        <div class="mb-4">
-            <img src="{{ qr_code }}" alt="QR Code" class="mx-auto border border-gray-600 p-3 rounded-lg bg-white" />
-        </div>
+
+        <!-- <div class="mb-4">
+            <img src="{{ qr_code|safe }}" alt="QR Code" class="mx-auto border border-gray-600 p-3 rounded-lg bg-white" />
+        </div> -->
+            {% if qr_code %}
+                <div class="qr-wrap mx-auto bg-white p-3 rounded-xl" aria-hidden="true">
+                    {{ qr_code|safe }}
+                </div>
+            {% else %}
+                <div class="qr-wrap mx-auto bg-white p-3 rounded-xl">
+                    <div class="w-full h-full bg-slate-100 dark:bg-slate-700 rounded-lg flex items-center justify-center">
+                        <span class="material-symbols-outlined text-slate-400" style="font-size: 48px;">qr_code</span>
+                    </div>
+                </div>
+            {% endif %}
+
+
 
         <!-- Secret Key -->
         <div class="mb-6">

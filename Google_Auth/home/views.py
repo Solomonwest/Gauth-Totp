@@ -68,11 +68,9 @@ def logout(request):
 
 
 def totp_setup(request):
-    print(request.user)
     confirmed_device = TOTPDevice.objects.filter(user=request.user, confirmed=True).first()
     if confirmed_device:
-        return render(request, 'totp_verify.html',
-                      {'has_confirmed_device': True})
+        return redirect( 'totp_verify')
     
     # Delete all un-confirmed TOTP Devices for the user 
     TOTPDevice.objects.filter(user=request.user, confirmed=False).delete()
@@ -100,6 +98,7 @@ def totp_setup(request):
     devices = TOTPDevice.objects.filter(user=request.user, confirmed=False).first()
 
     if devices and devices.verify_token(token):
+        print(f"{request.user} is now verified. ")
         devices.confirmed = True
         devices.save()
         return redirect('index')
@@ -118,8 +117,8 @@ def verify_and_enable(request):
         device.confirmed = True
         device.save()
         return redirect('index')
-    else:
-        return render(request, 'totp_verify.html', {'error': "INVALID CODE"})
+    
+    return render(request, 'totp_verify.html', {'error': "INVALID CODE"})
 
 
 
