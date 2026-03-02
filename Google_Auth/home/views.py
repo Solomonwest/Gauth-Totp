@@ -72,12 +72,7 @@ def totp_setup(request):
     if confirmed_device:
         return redirect( 'totp_verify')
     
-    # Delete all un-confirmed TOTP Devices for the user 
-    TOTPDevice.objects.filter(user=request.user, confirmed=False).delete()
-
-
     device, created = TOTPDevice.objects.get_or_create(user=request.user, confirmed=False)
-
     otp_url = device.config_url
 
     factory = qrcode.image.svg.SvgPathImage
@@ -91,19 +86,24 @@ def totp_setup(request):
     raw_key = device.bin_key
     # SECRET KEY FOR TOTP DEVICE
     base32_key = base64.b32encode(raw_key).decode('utf-8').strip('=')
+    
+    if request.method == 'POST':
+        token = request.POST.get('token','').strip()
 
+        devices = TOTPDevice.objects.filter(user=request.user, confirmed=False).first()
+        if devices and devices.verify_token(token):
+            print(f"{request.user} is now verified. ")
+            devices.confirmed = True
+            devices.save()
+            return redirect('index')
+        
+        else:
 
-    token = request.POST.get('token','').strip()
+            return render(request, 'totp_setup.html', {'error': "INVALID CODE", 'qr_code':svg_data, 'setup_key': base32_key })
 
-    devices = TOTPDevice.objects.filter(user=request.user, confirmed=False).first()
-
-    if devices and devices.verify_token(token):
-        print(f"{request.user} is now verified. ")
-        devices.confirmed = True
-        devices.save()
-        return redirect('index')
-    # else:
-    #     return render(request, 'otp.html', {'error': "INVALID CODE"})
+    # Delete all un-confirmed TOTP Devices for the user 
+    TOTPDevice.objects.filter(user=request.user, confirmed=False).delete()
+    device, created = TOTPDevice.objects.get_or_create(user=request.user, confirmed=False)
 
     return render(request, 'totp_setup.html', {'qr_code':svg_data, 'setup_key': base32_key})
 
